@@ -5,7 +5,7 @@ jobs:
     environment:
       - DOCKER_TAG: sdwolfe32/trumail
     docker:
-      - image: circleci/golang:1.10.2
+      - image: circleci/golang:1.16
     steps:
       - checkout
       - run:
@@ -18,9 +18,10 @@ jobs:
           name: Run unit tests
           command: make test
       - run:
-          name: Build binary for Alpine linux
+          name: Build binary for Alpine Linux
           command: env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.7
       - run:
           name: Build Docker image with binary
           command: docker build --no-cache -t $DOCKER_TAG .
